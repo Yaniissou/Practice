@@ -3,12 +3,14 @@ package fr.yanissou.practice.listeners;
 import fr.yanissou.practice.Practice;
 import fr.yanissou.practice.managers.DuelManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -69,5 +71,19 @@ public class PlayerListeners implements Listener {
 
         // set the right value
         attributeInstance.setBaseValue(24);
+    }
+
+    @EventHandler
+    public void onEntityDamage(EntityDamageByEntityEvent event) {
+        // Vérifie si l'attaquant est un joueur
+        if (event.getDamager() instanceof Player) {
+            Player player = (Player) event.getDamager();
+
+            // Supprime les sons de coup d'épée pour ce joueur
+            player.stopSound(Sound.ENTITY_PLAYER_ATTACK_STRONG);
+            player.stopSound(Sound.ENTITY_PLAYER_ATTACK_WEAK);
+            player.stopSound(Sound.ENTITY_PLAYER_ATTACK_CRIT);
+            player.stopSound(Sound.ENTITY_PLAYER_ATTACK_KNOCKBACK);
+        }
     }
 }
