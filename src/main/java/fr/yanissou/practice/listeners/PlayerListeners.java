@@ -3,6 +3,7 @@ package fr.yanissou.practice.listeners;
 import fr.yanissou.practice.Practice;
 import fr.yanissou.practice.managers.DuelManager;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,8 +18,12 @@ public class PlayerListeners implements Listener {
     public void onPlayerDeath(PlayerDeathEvent event) {
         event.setDeathMessage(null);
         event.getDrops().clear();
-        Bukkit.getScheduler().runTaskLaterAsynchronously(Practice.getInstance(), () -> event.getEntity().spigot().respawn(), 1L);
         DuelManager duelManager = Practice.getInstance().getDuelManager();
+        Bukkit.getScheduler().runTaskLater(Practice.getInstance(), () -> {
+            event.getEntity().spigot().respawn();
+            duelManager.resetInventory(event.getEntity());
+        }, 1L);
+
         if (duelManager.hasDuel(event.getEntity().getUniqueId())) {
             duelManager.removeDuel(event.getEntity().getUniqueId());
         }
@@ -29,11 +34,12 @@ public class PlayerListeners implements Listener {
             final Player killerPlayer = Bukkit.getPlayer(killerUUID);
             if (killerPlayer != null) {
                 duelManager.resetInventory(killerPlayer);
+                killerPlayer.teleport(new Location(killerPlayer.getWorld(), 0, -60, 0));
             }
         }
 
         // Reset inventory of the player who died
-        duelManager.resetInventory(event.getEntity());
+
 
 
     }
