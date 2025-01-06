@@ -59,10 +59,10 @@ public class PlayerListeners implements Listener {
                         "AttributeInstance of type 'ATTACK_SPEED' shouldn't be null !");
 
         // does the player already have the attributes ?
-        if (attributeInstance.getBaseValue() == 20)
+        if (attributeInstance.getBaseValue() == 24)
             return;
 
         // set the right value
-        attributeInstance.setBaseValue(20);
+        attributeInstance.setBaseValue(24);
     }
 }
