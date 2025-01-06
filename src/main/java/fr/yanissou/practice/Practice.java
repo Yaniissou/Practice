@@ -17,8 +17,9 @@ public final class Practice extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        CommandFramework framework = new CommandFramework(this);
-        registerCommands(framework);
+        CommandFramework commandFramework = new CommandFramework(this);
+        commandFramework.addCustomParameter("String", arguments -> arguments.getArgument(0));
+        registerCommands(commandFramework);
         registerListeners();
     }
 
