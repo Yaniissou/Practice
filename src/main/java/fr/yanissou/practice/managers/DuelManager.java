@@ -105,9 +105,12 @@ public class DuelManager {
         meta.setUnbreakable(true);
 
         // edit the "consumable" component
-        final PersistentDataContainer metaContainer = meta.getPersistentDataContainer();
-        final NamespacedKey consumableKey = NamespacedKey.minecraft("consumable");
-        metaContainer.set(consumableKey, PersistentDataType.STRING, "{consume_seconds:2000000, animation:'block', sound:{sound_id:\"\"}, has_consume_particles:false}");
+        final PersistentDataContainer container = meta.getPersistentDataContainer();
+        container.set(new NamespacedKey(Practice.getInstance(), "consumable"), PersistentDataType.BYTE, (byte) 1);  // 1 signifie que c'est consumable
+        container.set(new NamespacedKey(Practice.getInstance(), "consume_seconds"), PersistentDataType.INTEGER, 2000000);
+        container.set(new NamespacedKey(Practice.getInstance(), "animation"), PersistentDataType.STRING, "block");
+        container.set(new NamespacedKey(Practice.getInstance(), "sound_id"), PersistentDataType.STRING, "");
+        container.set(new NamespacedKey(Practice.getInstance(), "has_consume_particles"), PersistentDataType.BYTE, (byte) 0);  // Pas de particules
 
         // update the itemmeta
         stack.setItemMeta(meta);
