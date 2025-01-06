@@ -16,7 +16,7 @@ public class DuelCommand {
             permission = "practice.duel",
             usage = "/duel <player>",
             senderType = Command.SenderType.PLAYER)
-    public void onDuelCommand(@Param(value = "player") String playerName, CommandArguments arguments) {
+    public void onDuelCommand(String playerName, CommandArguments arguments) {
         final Player target = Bukkit.getPlayer(playerName);
         final Player sender = arguments.getSender();
         if (target == null) {
