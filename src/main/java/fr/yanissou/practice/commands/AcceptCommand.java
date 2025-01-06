@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 public class AcceptCommand {
 
 
-    @Command(name = "duel", aliases = {"1v1", "fight"},
+    @Command(name = "acept", aliases = {"1v1", "fight"},
             permission = "practice.duel",
             usage = "/duel <player>",
             min = 1,
