@@ -1,0 +1,6 @@
+name: Practice
+version: '1.0-SNAPSHOT'
+main: fr.yanissou.practice.Practice
+api-version: '1.21'
+authors: [Yanissou, EnjoyFelix]
+description: Little practice standalone plugin for 1.21
