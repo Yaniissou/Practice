@@ -4,15 +4,23 @@ import fr.yanissou.practice.Practice;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.FoodComponent;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public class DuelManager {
+    private static final ItemStack DIAMOND_SWORD = getCustomSword();
 
     private final Map<UUID, UUID> duel;
 
@@ -69,7 +77,7 @@ public class DuelManager {
         inventory.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
         inventory.setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
         inventory.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
-        inventory.addItem(new ItemStack(Material.DIAMOND_SWORD));
+        inventory.addItem(DIAMOND_SWORD);
         inventory.addItem(new ItemStack(Material.GOLDEN_APPLE, 16));
         inventory.addItem(new ItemStack(Material.BOW));
         inventory.addItem(new ItemStack(Material.ARROW, 8));
@@ -86,5 +94,23 @@ public class DuelManager {
         player.setHealth(20);
         player.setFoodLevel(20);
         player.setSaturation(20);
+    }
+
+    private static ItemStack getCustomSword() {
+        // create the itemstack
+        final ItemStack stack = new ItemStack(Material.DIAMOND_SWORD);
+
+        // set the right custom meta
+        final ItemMeta meta = Objects.requireNonNull(stack.getItemMeta());
+        meta.setUnbreakable(true);
+
+        // edit the "consumable" component
+        final PersistentDataContainer metaContainer = meta.getPersistentDataContainer();
+        final NamespacedKey consumableKey = NamespacedKey.minecraft("consumable");
+        metaContainer.set(consumableKey, PersistentDataType.STRING, "{consume_seconds:2000000, animation:'block', sound:{sound_id:\"\"}, has_consume_particles:false}");
+
+        // update the itemmeta
+        stack.setItemMeta(meta);
+        return stack;
     }
 }
