@@ -26,6 +26,11 @@ public class PlayerListeners implements Listener {
         Bukkit.getScheduler().runTaskLater(Practice.getInstance(), () -> {
             event.getEntity().spigot().respawn();
             duelManager.resetInventory(event.getEntity());
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                if (player.getUniqueId().equals(event.getEntity().getUniqueId()))
+                    return;
+                player.showPlayer(Practice.getInstance(), event.getEntity());
+            });
         }, 1L);
 
         if (duelManager.hasDuel(event.getEntity().getUniqueId())) {
@@ -39,13 +44,13 @@ public class PlayerListeners implements Listener {
             if (killerPlayer != null) {
                 duelManager.resetInventory(killerPlayer);
                 killerPlayer.teleport(new Location(killerPlayer.getWorld(), 0, -60, 0));
+                for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                    if (onlinePlayer.getUniqueId().equals(killerUUID))
+                        continue;
+                    killerPlayer.showPlayer(Practice.getInstance(), onlinePlayer);
+                }
             }
         }
-
-        // Reset inventory of the player who died
-
-
-
     }
 
     /**
