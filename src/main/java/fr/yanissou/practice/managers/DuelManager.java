@@ -106,11 +106,11 @@ public class DuelManager {
 
         // edit the "consumable" component
         final PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.set(new NamespacedKey(Practice.getInstance(), "consumable"), PersistentDataType.BYTE, (byte) 1);  // 1 signifie que c'est consumable
-        container.set(new NamespacedKey(Practice.getInstance(), "consume_seconds"), PersistentDataType.INTEGER, 2000000);
-        container.set(new NamespacedKey(Practice.getInstance(), "animation"), PersistentDataType.STRING, "block");
-        container.set(new NamespacedKey(Practice.getInstance(), "sound_id"), PersistentDataType.STRING, "");
-        container.set(new NamespacedKey(Practice.getInstance(), "has_consume_particles"), PersistentDataType.BYTE, (byte) 0);  // Pas de particules
+        container.set(new NamespacedKey("minecraft", "consumable"), PersistentDataType.BYTE, (byte) 1);  // 1 signifie que c'est consumable
+        container.set(new NamespacedKey("minecraft", "consume_seconds"), PersistentDataType.INTEGER, 2000000);
+        container.set(new NamespacedKey("minecraft", "animation"), PersistentDataType.STRING, "block");
+        container.set(new NamespacedKey("minecraft", "sound_id"), PersistentDataType.STRING, "");
+        container.set(new NamespacedKey("minecraft", "has_consume_particles"), PersistentDataType.BYTE, (byte) 0);  // Pas de particules
 
         // update the itemmeta
         stack.setItemMeta(meta);
