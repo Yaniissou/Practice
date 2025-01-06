@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.UUID;
 
@@ -15,6 +16,8 @@ public class PlayerListeners implements Listener {
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         event.setDeathMessage(null);
+        event.getDrops().clear();
+        Bukkit.getScheduler().runTaskLaterAsynchronously(Practice.getInstance(), () -> event.getEntity().spigot().respawn(), 1L);
         DuelManager duelManager = Practice.getInstance().getDuelManager();
         if (duelManager.hasDuel(event.getEntity().getUniqueId())) {
             duelManager.removeDuel(event.getEntity().getUniqueId());
