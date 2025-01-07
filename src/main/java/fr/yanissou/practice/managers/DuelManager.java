@@ -1,10 +1,20 @@
 package fr.yanissou.practice.managers;
 
 import fr.yanissou.practice.Practice;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.sounds.SoundEffects;
+import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.component.Consumable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.craftbukkit.v1_21_R2.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -14,10 +24,7 @@ import org.bukkit.inventory.meta.components.FoodComponent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class DuelManager {
     private static final ItemStack DIAMOND_SWORD = getCustomSword();
@@ -96,24 +103,29 @@ public class DuelManager {
         player.setSaturation(20);
     }
 
+    /**
+     * Creates a custom Sword capable of blocking
+     * @return A sword capable of blocking;
+     */
     private static ItemStack getCustomSword() {
         // create the itemstack
         final ItemStack stack = new ItemStack(Material.DIAMOND_SWORD);
 
-        // set the right custom meta
+        // update the itemmeta
         final ItemMeta meta = Objects.requireNonNull(stack.getItemMeta());
         meta.setUnbreakable(true);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+        stack.setItemMeta(meta);
 
         // edit the "consumable" component
-        final PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.set(new NamespacedKey("minecraft", "consumable"), PersistentDataType.BYTE, (byte) 1);  // 1 signifie que c'est consumable
-        container.set(new NamespacedKey("minecraft", "consume_seconds"), PersistentDataType.INTEGER, 2000000);
-        container.set(new NamespacedKey("minecraft", "animation"), PersistentDataType.STRING, "block");
-        container.set(new NamespacedKey("minecraft", "sound_id"), PersistentDataType.STRING, "");
-        container.set(new NamespacedKey("minecraft", "has_consume_particles"), PersistentDataType.BYTE, (byte) 0);  // Pas de particules
+        final net.minecraft.world.item.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(stack);
+        final Consumable consumable = new Consumable(Float.MAX_VALUE, ItemUseAnimation.d, SoundEffects.kw, false, List.of());
 
-        // update the itemmeta
-        stack.setItemMeta(meta);
-        return stack;
+        // Set the data component
+        // Translates to DatacomponentMap.builder().set(DataComponents.CONSUMABLE, consumable).build();
+        nmsItemStack.a(DataComponentPatch.a().a(DataComponents.x, consumable).a());
+
+        // return the itemstack with the data component
+        return CraftItemStack.asBukkitCopy(nmsItemStack);
     }
 }
