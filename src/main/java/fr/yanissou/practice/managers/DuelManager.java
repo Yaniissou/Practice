@@ -1,6 +1,7 @@
 package fr.yanissou.practice.managers;
 
 import fr.yanissou.practice.Practice;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.sounds.SoundEffects;
@@ -9,7 +10,7 @@ import net.minecraft.world.item.component.Consumable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_21_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_21_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -111,7 +112,7 @@ public class DuelManager {
 
         // edit the "consumable" component
         final net.minecraft.world.item.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(stack);
-        final Consumable consumable = new Consumable(Float.MAX_VALUE, ItemUseAnimation.d, SoundEffects.kw, false, List.of());
+        final Consumable consumable = new Consumable(Float.MAX_VALUE, ItemUseAnimation.d, Holder.a(SoundEffects.xd), false, List.of());
 
         // Set the data component
         // Translates to DatacomponentMap.builder().set(DataComponents.CONSUMABLE, consumable).build();
