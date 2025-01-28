@@ -10,18 +10,17 @@ import net.minecraft.world.item.component.Consumable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.craftbukkit.v1_21_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
 public class DuelManager {
-    private static final ItemStack DIAMOND_SWORD = getCustomSword();
-
     private final Map<UUID, UUID> duel;
 
     public DuelManager() {
@@ -77,7 +76,7 @@ public class DuelManager {
         inventory.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
         inventory.setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
         inventory.setBoots(new ItemStack(Material.DIAMOND_BOOTS));
-        inventory.addItem(DIAMOND_SWORD);
+        inventory.addItem(getCustomSword());
         inventory.addItem(new ItemStack(Material.GOLDEN_APPLE, 16));
         inventory.addItem(new ItemStack(Material.BOW));
         inventory.addItem(new ItemStack(Material.ARROW, 8));
@@ -100,7 +99,10 @@ public class DuelManager {
      * Creates a custom Sword capable of blocking
      * @return A sword capable of blocking;
      */
-    private static ItemStack getCustomSword() {
+    private ItemStack getCustomSword() {
+        final NamespacedKey attackDamageKey = new NamespacedKey(Practice.getInstance(), "generic.attackDamage");
+        final AttributeModifier attackAttributeModifier = new AttributeModifier(attackDamageKey, 7, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HAND);
+
         // create the itemstack
         final ItemStack stack = new ItemStack(Material.DIAMOND_SWORD);
 
@@ -108,12 +110,12 @@ public class DuelManager {
         final ItemMeta meta = Objects.requireNonNull(stack.getItemMeta());
         meta.setUnbreakable(true);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
+        meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, attackAttributeModifier);
         stack.setItemMeta(meta);
 
         // edit the "consumable" component
         final net.minecraft.world.item.ItemStack nmsItemStack = CraftItemStack.asNMSCopy(stack);
         final Consumable consumable = new Consumable(Float.MAX_VALUE, ItemUseAnimation.d, Holder.a(SoundEffects.xd), false, List.of());
-
         // Set the data component
         // Translates to DatacomponentMap.builder().set(DataComponents.CONSUMABLE, consumable).build();
         nmsItemStack.a(DataComponentPatch.a().a(DataComponents.x, consumable).a());
