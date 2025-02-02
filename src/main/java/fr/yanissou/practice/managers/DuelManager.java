@@ -14,6 +14,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.craftbukkit.v1_21_R3.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -109,6 +110,7 @@ public class DuelManager {
         // update the itemmeta
         final ItemMeta meta = Objects.requireNonNull(stack.getItemMeta());
         meta.setUnbreakable(true);
+        meta.addEnchant(Enchantment.SHARPNESS, 1, true);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_UNBREAKABLE);
         meta.addAttributeModifier(Attribute.ATTACK_DAMAGE, attackAttributeModifier);
         stack.setItemMeta(meta);
